@@ -1,0 +1,19 @@
+{
+  "name": "Project_1",
+  "main": "index.js",
+  "version": "0.0.0",
+  "authors": [
+    "rlpacht <rl.pacht@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4"
+  }
+}
