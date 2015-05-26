@@ -1,0 +1,45 @@
+.recipe-result {
+	border: 3px solid rgb(255, 147, 139);
+	/*max-width: 150px;*/
+	/*max-height: 150px;*/
+	width: 175px;
+	height: 200px;
+	display: inline-block;
+	padding: 10px;
+	margin: 10px 50px 10px 0px;
+	
+	/*make background color lighter*/
+	/*background: rgb(255, 194, 139);*/
+}
+
+.recipe-row {
+	position: relative;
+	left: 150px;
+	margin: 10px 0px 10px 0px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#search-bar {
+	position: relative;
+	left: 550px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+body {
+	background: rgb(138, 236, 250);
+}
+
+.submit-search {
+	position: relative;
+	left: 650px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.fave-button {
+	background: rgb(255, 147, 139);
+	background: rgb(255, 186, 181);
+	background: rgb(255, 218, 139);
+}

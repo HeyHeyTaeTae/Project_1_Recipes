@@ -21,6 +21,11 @@ var userSchema = new mongoose.Schema({
 				lastName: {
 					type: String,
 					default: ""
+				},
+				//will store recipe ids
+				favoritedRecipes: {
+					type: Array,
+					default: []
 				}
 
 				//need to be specific to my app
@@ -64,6 +69,8 @@ userSchema.methods.checkPassword = function (password, cb) {
 			}
 		});
 };
+
+//userSchema.statics.is
 var User = mongoose.model("User", userSchema);
 module.exports = User;
 

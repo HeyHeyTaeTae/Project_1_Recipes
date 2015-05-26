@@ -1,4 +1,51 @@
 //TODO: make sure you require recipes
 //in the models index.js
+//recipe schema
+var mongoose = require('mongoose');
+//var bcrypt = require('bcrypt');
 
-recipe schema
+var recipeSchema = new mongoose.Schema ({
+					recipeId: { //id
+						type: String,
+						default: ""
+					},
+					ingredients: { //ingredientLines
+						type: Array,
+						default: []
+					},
+					time: { //totalTime
+						type: String,
+						default: ""
+					},
+					source: { //source
+						//figure out how to add urls to models
+					},
+					numberOfServings: { //yield
+						type: Number,
+						default: 0
+					},
+					name: { //name
+						type: String,
+						default: ""
+					},
+					cuisine: { //attributes.cuisine
+						type: String,
+						default: ""
+					},
+					holiday: { //attributes.holiday
+						type: String,
+						default: ""
+					},
+					images: {
+						//still need to figure out how to do urls
+					}
+
+
+})
+
+recipeSchema.statics.addToDatabase = function (recipeInfo) {
+	
+}
+
+var Recipe = mongoose.model("Recipe", recipeSchema);
+module.exports = Recipe;
