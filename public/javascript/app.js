@@ -8,22 +8,11 @@ $(document).ready(function () {
 		var searchQuery = $('.search').val();
 		runSearch(searchQuery, function(data) {
 			var searchResults = data.matches;
-			var groupedSearchResults = [];
-			//if you hit the search button twice,
-			// it'll print the same results at the bottom
-			for (var i = 0; i < Math.ceil(searchResults.length / 5); i++) {
-				var group = [];
-				for(var k = i * 5; k < (i * 5) + 5; k++){
-					if (searchResults[k] !== undefined) {
-						group.push(searchResults[k]);
-					}
-				}
-				groupedSearchResults.push(group);
-			}
+			var groupedSearchResults = sortResults(searchResults)
 			var resultsTemplate = $("#display-search-results").html();
 			var compile = _.template(resultsTemplate);
 			var putOnPage = compile({collection: groupedSearchResults});
-			$("#search-wrapper").append(putOnPage);
+			$("#results-wrapper").html(putOnPage);
 		}, startNumber);
 	});
 
@@ -33,9 +22,26 @@ $(document).ready(function () {
 	// 	$loginForm.toggle();
 	// })
 
-
+	// TODO: This is not the right way to do this
+	$('#show-faves').on('click', function() {
+		viewFavorites();
+	})
 
 })
+
+function sortResults(data) {
+	var groupedResults = [];
+	for (var i = 0; i < Math.ceil(data.length / 5); i++) {
+		var group = [];
+		for(var k = i * 5; k < (i * 5) + 5; k++){
+			if (data[k] !== undefined) {
+				group.push(data[k]);
+			}
+		}
+		groupedResults.push(group);
+	}
+	return groupedResults
+}
 
 function runSearch(searchQuery,callback, startNumber) {
 	if(startNumber === undefined) {
@@ -54,39 +60,120 @@ function runSearch(searchQuery,callback, startNumber) {
 function addToFavorites(recipeButton){
 	var id = $(recipeButton).data().id;
 	$.get('/recipes/' + id).done(function(res) {
+		var foodId = $(recipeButton).data().id;
+		console.log(foodId);
+		$.post("/users/favorites", {
+			foodId: foodId
+		});
 		// If my db doesn't have this recipe, 
 		// fetch it from Yummly, and then use Yummly's
 		// response to create it in my db
-		debugger
 		if (_.isEqual({}, res)) {
-			debugger
+			//var recipe = findItemById(id);
+			//cloneItemById(recipe);
 			findAndCloneItemById(id);
-			
 		} 
 	})
 }
 
+function findItemById(recipeId, cb) {
+	$.get(yummlyApiEndpoint + "recipe/" + recipeId + "?", {
+		_app_id: APP_ID,
+		_app_key: APP_KEY
+	}).done(function(res) {
+		createItemById(res,cb);
+
+	})
+}
+
+function createItemById(recipe,cb) {
+	var recipeInfo = {
+		name: recipe.name, 
+		recipeId: recipe.id, 
+		ingredients: recipe.ingredientLines,
+		time: recipe.totalTime,
+		numberOfServings: recipe.yield,
+		cuisine: recipe.attributes.cuisine,
+		holiday: recipe.attributes.holiday,
+		source: recipe.source,
+		images: recipe.images}
+		console.log("create item by id: ", recipeInfo);
+		cb(recipeInfo);
+	// $.post('/recipes/:id/views', recipeInfo).done(function(res) {
+	// // add the recipeId to the current user's favorites
+	// });
+}
 function findAndCloneItemById(recipeId) {
-	console.log(recipeId);
-	$.get(yummlyApiEndpoint + "recipe/", {
-		recipe: recipeId,
+	$.get(yummlyApiEndpoint + "recipe/" + recipeId + "?", {
 		_app_id: APP_ID,
 		_app_key: APP_KEY
 	}).done(function(res) {
 		var recipeInfo = {
 			name: res.name, 
-			id: res.id, 
-			ingedients: res.ingredientLines,
+			recipeId: res.id, 
+			ingredients: res.ingredientLines,
 			time: res.totalTime,
+			numberOfServings: res.yield,
 			cuisine: res.attributes.cuisine,
 			holiday: res.attributes.holiday,
-			source: res.source,
+			//source: res.source,
 			images: res.images}
+			console.log(recipeInfo);
 		$.post('/recipes/', recipeInfo);
 	}).done(function(res) {
 		// add the recipeId to the current user's favorites
 	});
-
-	
 }
 
+function viewFavorites() {
+	$.get("/users/favorites", function (res) {
+		console.log(res);
+		renderFavorites(res);
+	})
+}
+// function viewFavorites() {
+// 	// TODO: Function here should not be responsible for redirecting and 
+// 	// loading data. Backend is responsible for redirects, and then on 
+// 	// the new page load, make the request for the data. 
+// 	$.get("/favorites", function (res) {
+// 		console.log(res);
+// 	}).done(
+// 		$.get("/users/favorites", function (res) {
+// 			renderFavorites(res);	
+// 		})
+
+function renderFavorites(faves) {
+	var arrayOfFaves = sortResults(faves);
+	var faveTemplate = $("#display-faves").html();
+	var compile = _.template(faveTemplate);
+	var favesOnPage = compile({collection: arrayOfFaves});
+	$("#results-wrapper").html(favesOnPage);
+}
+
+
+function viewRecipe (recipeViewButton) {
+	var id = $(recipeViewButton).data().id;
+	$.get("/recipes/" + id).done(function (res) {
+		if (_.isEqual({}, res)) {
+			//var recipeId = $(recipeViewButton).data().id;
+			findItemById(id, function (recipe) {
+				console.log("if recipe is not in db: ", recipe);
+				recipeTemplate(recipe);
+			});
+		} else {
+			var recipeId = $(recipeViewButton).data().id;
+			$.get("/views/" + recipeId).done(function (res) {
+				console.log("if recipe is in db: ", res);
+				recipeTemplate(res);
+			})
+		}
+	})
+}
+
+function recipeTemplate (recipe) {
+	var recipeTemp = $("#display-recipe").html();
+	var compile = _.template(recipeTemp);
+	console.log("recipe: ", recipe);
+	var recipeLayout = compile({partsOfRecipe: recipe});
+	$("#results-wrapper").html(recipeLayout);
+}

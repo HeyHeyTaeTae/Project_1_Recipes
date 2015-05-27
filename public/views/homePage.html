@@ -19,8 +19,9 @@
 		  	<div class="form-group">
 		    	<input type="password" class="form-control" placeholder="enter password" name="user[password]">
 		  	</div>
-		  	<button>Sign Up</button>
+		  	<button>Sign In</button>
 		</form>
+		<button id="show-faves">Faves!</button>
 		<div class="input-group input-group-lg">
 			<input id="search-bar" class='search form-control' placeholder='Search for Recipes'/>
 			<button class="submit-search btn btn-default">Search</button>
@@ -28,19 +29,75 @@
 	<!-- </div> -->
 	<!-- <button class="login-button">Login</button> -->
 	
-	<div id="search-wrapper"></div>
+	<div id="results-wrapper"></div>
 </body>
 <script type="text/template" id="display-search-results">
 	<% collection.forEach(function (group) { %>
-		<div class="recipe-row">
-			<% group.forEach(function(recipe) { %>
-				<div class='recipe-result  thumbnail'>
-					<img src="<%= recipe.imageUrlsBySize[90] %>">
-					<button data-id="<%=recipe.id %>" class="fave-button btn btn-default" onclick=addToFavorites(this)>Fave</button>
-					<div class='recipe-name'><%= recipe.recipeName %></div>
+		
+			<div class="recipe-row">
+				<% group.forEach(function(recipe) { %>
+					<div class='recipe-result  thumbnail'>
+						<img src="<%= recipe.imageUrlsBySize[90] %>">
+						<button data-id="<%=recipe.id %>" class="fave-button btn btn-default" onclick=addToFavorites(this)>Fave</button>
+						<button data-id="<%=recipe.id %>" class="view-button btn btn-default" onclick=viewRecipe(this)>view recipe</button>
+						<div class='recipe-name'><%= recipe.recipeName %></div>
+					</div>
+				<% }) %>
+			</div>
+		
+	<%}); %>
+	// <button class="see-more-results" onclick=>See more recipes</button> 
+</script>
+<script type="text/template" id="display-faves">
+	<% collection.forEach(function (groups) { %>
+		<a href="/recipe/:id">
+		<div class="faves-row">
+			<% groups.forEach(function(faves) { %>
+				<%console.log(faves)%>
+				<div class='fave-result  thumbnail'>
+					<img src="<%= faves.images[0].hostedMediumUrl %>">
+					<div class='fave-name'><%= faves.name %></div>
 				</div>
 			<% }) %>
 		</div>
+		</a>
 	<%}); %>
 </script>
+<script type="text/template" id="display-recipe">
+	<div id="recipe-holder">
+		<div class="name-of-recipe"><%= partsOfRecipe.name %></div>
+		<div class="recipe-source">
+			<div class="recipe-source-site"><%=partsOfRecipe.source.sourceDisplayName%></div>
+			<a class="recipe-source-url" href="<%=partsOfRecipe.source.sourceRecipeUrl%>"><%=partsOfRecipe.source.sourceRecipeUrl%></a>
+		</div>
+		<div class="recipe-picture">
+			<img src="<%=partsOfRecipe.images[0].hostedLargeUrl%>">
+		</div>
+		<div class="recipe-time panel-body"><%=partsOfRecipe.time%></div>
+		<div class="titles">
+			<span class="ingredients">Ingredients</span>
+			<span class="notes">Notes</span>
+
+		</div>
+
+		<% partsOfRecipe.ingredients.forEach(function (items) {%>
+			<li class="recipe-ingredients"><%= items %> </li>
+		<%}); %>
+	</div>
+</script>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -6,6 +6,7 @@ var session = require("express-session");
 
 var app = express();
 app.use(bodyParser.urlencoded({extended: true }));
+app.use(bodyParser.json())
 app.use(express.static("public"));
 app.use(express.static("bower_components"));
 
@@ -45,15 +46,9 @@ var faveHelpers = function (req, res, next) {
 	var baseUrl = "https://api.yummly.com/v1";
 	var API_KEY = "0d58d3705c115190fb2f3e9d89ed3547"
 	var APP_ID = "2d5c41e5"
-	req.isInDatabase = function (recipeId, cb) {
-		//would it be _id?
-		// console.log(db);
-		db.Recipe.findById(recipeId, cb);
-		return recipeId;
+	req.isInDatabase = function (idOfRecipe, cb) {
+		db.Recipe.findOne({recipeId:idOfRecipe}, cb)
 	};
-
-	// req.addToDatabase = function (id) {
-	// };
 	next();
 };
 app.use(faveHelpers);
@@ -73,6 +68,7 @@ app.get("/signup", function (req, res) {
 
 app.post("/users", function (req, res) {
 	var newUser = req.body.user;
+	console.log(newUser);
 	db.User.createSecure(newUser, function (err, user) {
 		if (user) {
 			req.login(user);
@@ -121,45 +117,69 @@ app.get("/logout", function (req, res) {
 	
 });
 
+// TODO: This route should not be responsible for adding favorites to the
+// current user. Just send back the recipe with the given id, or an 
+// empty object if that recipe isn't found. Adding recipes to a user's
+// favorites should be done in a separate route
 app.get("/recipes/:id", function (req, res) {
 	//find out if recipe is in the database
 	//add to database if it is not
 	//add id to user model
 	var id = req.params.id;
-	// console.log("food id", id);
-	// console.log("faving a recipe!");
-	//req.currentUser(function(err, user){console.log("current User", user)});
-	req.isInDatabase(id, function (err, id) {
-		console.log("params test", req.params.id);
-		if(!err) { // if found
-			req.currentUser(function (user) {
-				console.log('no error');
-				console.log("id", id);
-				console.log("in db", user);
-				user.favoritedRecipes.push(id);
-			})
-			// console.log('no error')
-			// user.favoriteRecipes.push(id);
+	req.isInDatabase(id, function (err, result) {
+		if (result){ //if found
+			//use indexOf or the underscore method contains() 
+			//to make sure the user doesn't add the same recipe twice
+			res.send(req.params.id)
 		} else { //add recipe to the database if not found
-			//console.log('error');
-			//console.log("params test 2", req.params.id)
-			req.currentUser(function(err, user) {
-				//console.log("id", id);
-				
-				user.favoritedRecipes.push(req.params.id);
-				//console.log("not in db", user)
-				user.save();
-			})
-			// add recipe to db
-			// push to user favorites
+			//use _id
 			res.send({});
 		}
 	});
 });
 
+
 app.post("/recipes", function (req, res) {
 	console.log("creating")
-	Recipe.create(res.params)
+	//console.log("req.body ", req.body);
+	var recipeInfo = req.body;
+	db.Recipe.create(recipeInfo, function (err, recipe) {
+		console.log(recipe);
+	});
+
+})
+app.get("/favorites", function (req, res) {
+	var favePath = path.join(views, "favorites.html");
+	res.sendFile(favePath);
+})
+
+app.get("/users/favorites", function (req, res) {
+	req.currentUser(function (err, user) {
+		var recipeIds = user.favoritedRecipes;
+		db.Recipe.find( { recipeId: { $in: recipeIds } }, function(err, recipes) {
+			res.send(recipes);
+		});
+	})	
+})
+
+app.post("/users/favorites", function (req, res) {
+	var recipeId = req.body.foodId;
+	//console.log("req.body: ", req.body.foodId)
+	req.currentUser(function (err, user) {
+		user.favoritedRecipes.push(recipeId);
+		user.save();
+	})
+	
+})
+
+app.get("/views/:id", function (req, res) {
+	//console.log(req.params.id)
+	var idOfRecipe = req.params.id;
+	req.isInDatabase(idOfRecipe, function (err, recipe) {
+		//console.log(recipe);
+		res.send(recipe);
+	});
+	//res.send()
 })
 
 app.listen(3000, function (req, res) {

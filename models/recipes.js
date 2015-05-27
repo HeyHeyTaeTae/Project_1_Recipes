@@ -43,9 +43,18 @@ var recipeSchema = new mongoose.Schema ({
 
 })
 
-recipeSchema.statics.addToDatabase = function (recipeInfo) {
+// recipeSchema.statics.addToDatabase = function (recipeInfo, cb) {
+// 	//console.log("this is in the recipe model");
+// 	//console.log(recipeInfo.ingredients);
+// 	// this.ingredients.push(recipeInfo.ingredients)
+// 	this.create({recipeId: recipeInfo.recipeId,
+// 	ingredients: recipeInfo.ingredients,
+// 	time: recipeInfo.time, cuisine: recipeInfo.cuisine,
+// 	holiday: recipeInfo.holiday, numberOfServings: recipeInfo. numberOfServings
+// 	//will need to eventually add source and images
+// 	}, cb);
 	
-}
+// }
 
 var Recipe = mongoose.model("Recipe", recipeSchema);
 module.exports = Recipe;

@@ -7,9 +7,19 @@
 	display: inline-block;
 	padding: 10px;
 	margin: 10px 50px 10px 0px;
+	border-radius: 20px;
 	
 	/*make background color lighter*/
 	/*background: rgb(255, 194, 139);*/
+}
+
+.fave-result {
+	width: 175px;
+	height: 200px;
+	display: inline-block;
+	padding: 10px;
+	margin: 10px 50px 10px 0px;
+	border-radius: 20px;
 }
 
 .recipe-row {
@@ -18,6 +28,12 @@
 	margin: 10px 0px 10px 0px;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.faves-row {
+	position: relative;
+	left: 150px;
+	margin: 10px 0px 10px 0px;
 }
 
 #search-bar {
@@ -38,8 +54,75 @@ body {
 	margin-right: auto;
 }
 
+#show-faves {
+	display: inline-block;
+}
+
 .fave-button {
 	background: rgb(255, 147, 139);
 	background: rgb(255, 186, 181);
 	background: rgb(255, 218, 139);
 }
+
+.view-button {
+	/*width: 40px;*/
+
+}
+
+#recipe-holder {
+	height: 700px;
+	max-width: 1250px;
+	border-radius: 20px;
+	background: rgba(255, 240, 159, .8);
+	position: relative;
+	left: 80px;
+}
+
+.name-of-recipe {
+	text-align: center;
+	font-size: 40px;
+	/*position: relative;
+	left: 500px;*/
+
+}
+
+.recipe-picture{
+	max-width: 374px;
+	border: 7px solid white;
+	margin: 20px;
+	position: relative;
+	left: 400px;
+
+}
+
+.recipe-ingredients {
+	font-size: 20px;
+	position: relative;
+	left: 70px;
+}
+
+.recipe-time {
+	font-size: 15px;
+}
+
+.ingredients {
+	font-size: 25px;
+	position: relative;
+	left: 40px;
+}
+
+.notes {
+	font-size: 25px;
+	position: relative;
+	left: 600px;
+}
+
+.titles {
+	display: inline-block;
+}
+.recipe-source {
+	text-align: center;
+}
+
+
+
