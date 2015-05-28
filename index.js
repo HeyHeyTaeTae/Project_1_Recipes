@@ -228,6 +228,6 @@ app.delete("/users/favorites/:id", function (req, res) {
 // 	//res.send()
 // })
 
-app.listen(3000, function (req, res) {
-	console.log(3000);
+app.listen(process.env.PORT ||3000, function (req, res) {
+	
 });

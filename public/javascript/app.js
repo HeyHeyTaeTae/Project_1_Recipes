@@ -1,4 +1,4 @@
-
+var yummlyApiEndpoint = "https://api.yummly.com/v1/api/"; //used to have recipes? at end
 var searchResults;
 var startNumber = 0;
 
