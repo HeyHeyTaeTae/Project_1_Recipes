@@ -54,6 +54,7 @@ userSchema.statics.createSecure = function (params, cb) {
 
 userSchema.statics.authenticate = function (params, cb) {
 	this.findOne({email: params.email}, function (err, user) {
+		console.log(err);
 		user.checkPassword(params.password, cb);
 	});
 };
