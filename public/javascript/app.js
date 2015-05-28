@@ -177,3 +177,22 @@ function recipeTemplate (recipe) {
 	var recipeLayout = compile({partsOfRecipe: recipe});
 	$("#results-wrapper").html(recipeLayout);
 }
+
+function addNotes (noteButton) {
+	var $id = $(noteButton).data().id;
+	console.log($id);
+	// $.get("/recipes/" + id).done(function (res) {
+	// 	if (_.isEqual({}, res)) {
+	// 		alert("you need you fave the recipe first!");
+	// 		}
+	// 	} else {
+	// 		$.get("/notes", ).done(function (res) {
+	// 			console.log("if recipe is in db: ", res);
+	// 			recipeTemplate(res);
+	// 		})
+	// 	}
+	// })
+}
+
+
+

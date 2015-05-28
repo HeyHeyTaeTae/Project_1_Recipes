@@ -1,8 +1,5 @@
-//TODO: make sure you require recipes
-//in the models index.js
-//recipe schema
 var mongoose = require('mongoose');
-//var bcrypt = require('bcrypt');
+var notes = require("./notes");
 
 var recipeSchema = new mongoose.Schema ({
 					recipeId: { //id
@@ -38,23 +35,14 @@ var recipeSchema = new mongoose.Schema ({
 					},
 					images: {
 						//still need to figure out how to do urls
-					}
+					},
+					recipeNotes: [notes]
 
 
 })
-
-// recipeSchema.statics.addToDatabase = function (recipeInfo, cb) {
-// 	//console.log("this is in the recipe model");
-// 	//console.log(recipeInfo.ingredients);
-// 	// this.ingredients.push(recipeInfo.ingredients)
-// 	this.create({recipeId: recipeInfo.recipeId,
-// 	ingredients: recipeInfo.ingredients,
-// 	time: recipeInfo.time, cuisine: recipeInfo.cuisine,
-// 	holiday: recipeInfo.holiday, numberOfServings: recipeInfo. numberOfServings
-// 	//will need to eventually add source and images
-// 	}, cb);
-	
-// }
+// <% partsOfRecipe.recipeNotes.notes.forEach(function (items) {%>
+		// 	<li class="list-of-notes"><%= items %> </li>
+		// <%}); %>
 
 var Recipe = mongoose.model("Recipe", recipeSchema);
 module.exports = Recipe;

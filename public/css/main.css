@@ -70,6 +70,7 @@ body {
 }
 
 #recipe-holder {
+	border: 5px solid rgb(255, 147, 139);
 	height: 700px;
 	max-width: 1250px;
 	border-radius: 20px;

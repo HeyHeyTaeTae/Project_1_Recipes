@@ -3,3 +3,4 @@ mongoose.connect("mongodb://localhost/Project_1");
 
 module.exports.User = require("./user");
 module.exports.Recipe = require("./recipes");
+module.exports.Notes = require('./notes')

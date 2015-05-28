@@ -19,7 +19,7 @@
 		  	<div class="form-group">
 		    	<input type="password" class="form-control" placeholder="enter password" name="user[password]">
 		  	</div>
-		  	<button>Sign In</button>
+		  	<button>Log In</button>
 		</form>
 		<button id="show-faves">Faves!</button>
 		<div class="input-group input-group-lg">
@@ -79,10 +79,20 @@
 			<span class="notes">Notes</span>
 
 		</div>
+		<form id="notes-form" class="form-inline" method="POST" action="/notes">
+		  	<div class="form-group">
+		    	<input type="text" class="form-control" placeholder="anything to add?" name="notes[notes]">
+		  	</div>
+		  	<button>Notes!</button>
+		</form>
+<%console.log(partsOfRecipe.recipeNotes); %>
+		//<button data-id="<%=partsOfRecipe.recipeId %>" class="btn btn-info" onclick=addNotes(this)>Add some notes!</button>
 
 		<% partsOfRecipe.ingredients.forEach(function (items) {%>
 			<li class="recipe-ingredients"><%= items %> </li>
 		<%}); %>
+		
+		
 	</div>
 </script>
 </html>

@@ -148,6 +148,18 @@ app.post("/recipes", function (req, res) {
 	});
 
 })
+
+app.post("/notes", function (req, res) {
+	//the notes I send here
+	//res.body, req.body, ect
+	var newNote = req.body.notes.notes;
+	req.currentUser(function (err, user) {
+		db.Notes.create({notes: newNote, userOfNote: user},
+		 function (err, note) {
+		 	console.log(note);
+		 })
+	})
+})
 app.get("/favorites", function (req, res) {
 	var favePath = path.join(views, "favorites.html");
 	res.sendFile(favePath);
