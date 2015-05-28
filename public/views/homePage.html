@@ -12,21 +12,45 @@
 </head>
 <body>
 	<!-- <div class="page-header"> -->
+	<!-- <div id="login-signup">
 		<form id="login-form" class="form-inline" method="POST" action="/login">
 		  	<div class="form-group">
 		    	<input type="text" class="form-control" placeholder="enter email" name="user[email]">
 		  	</div>
 		  	<div class="form-group">
 		    	<input type="password" class="form-control" placeholder="enter password" name="user[password]">
-		  	</div>
-		  	<button>Log In</button>
-		</form>
+		  	</div> -->
+		  	<a href="/login">
+		  		<button class="login-button">Log In</button>
+		  	</a>
+		  	
+		<!-- </form> -->
+		<a href="/logout">
+			<button class"logout">Log out</button>
+		</a>
+		
+
+		<!-- <form class="form-inline" method="POST" action="/users">
+		    <div class="form-group">
+		        <input type="text" class="form-control" name="user[email]" placeholder='Email Address'>
+		    </div>
+		    <div class="form-group">
+		        <input type="password" class="form-control" name="user[password]" placeholder='Password'>
+		    </div>
+		    <div class="form-group">
+		        <input type="password" class="form-control" name="user[password_confirmation]" placeholder='Password Confirmation'>
+		    </div> -->
+		    <button class="signup-button">Sign Up</button>
+		<!-- </form> -->
+	</div>
 		<button id="show-faves">Faves!</button>
-		<div class="input-group input-group-lg">
+
+		<div class="input-group input-group-lg search-form">
 			<input id="search-bar" class='search form-control' placeholder='Search for Recipes'/>
 			<button class="submit-search btn btn-default">Search</button>
 		</div>
 	<!-- </div> -->
+	<button class="see-more-results">See more recipes</button> 
 	<!-- <button class="login-button">Login</button> -->
 	
 	<div id="results-wrapper"></div>
@@ -36,62 +60,55 @@
 		
 			<div class="recipe-row">
 				<% group.forEach(function(recipe) { %>
-					<div class='recipe-result  thumbnail'>
-						<img src="<%= recipe.imageUrlsBySize[90] %>">
+					<div class='recipe-result  thumbnail' >
+						<img data-id="<%=recipe.id %>" src="<%= recipe.imageUrlsBySize[90] %>" class="recipe-thumbnail-image" onclick=viewRecipe(this)>
 						<button data-id="<%=recipe.id %>" class="fave-button btn btn-default" onclick=addToFavorites(this)>Fave</button>
-						<button data-id="<%=recipe.id %>" class="view-button btn btn-default" onclick=viewRecipe(this)>view recipe</button>
-						<div class='recipe-name'><%= recipe.recipeName %></div>
+						<div data-id="<%=recipe.id %>" class='recipe-name' onclick=viewRecipe(this)><%= recipe.recipeName %></div>
 					</div>
 				<% }) %>
 			</div>
 		
 	<%}); %>
-	// <button class="see-more-results" onclick=>See more recipes</button> 
 </script>
+
 <script type="text/template" id="display-faves">
-	<% collection.forEach(function (groups) { %>
-		<a href="/recipe/:id">
+	<% collection.forEach(function (group) { %>
 		<div class="faves-row">
-			<% groups.forEach(function(faves) { %>
-				<%console.log(faves)%>
-				<div class='fave-result  thumbnail'>
-					<img src="<%= faves.images[0].hostedMediumUrl %>">
-					<div class='fave-name'><%= faves.name %></div>
+			<% group.forEach(function(recipe) { %>
+				<%console.log(recipe)%>
+				<div class='fave-result  thumbnail' >
+					<img  data-id="<%=recipe.recipeId %>" src="<%= recipe.images[0].hostedMediumUrl %>" onclick=viewRecipe(this)>
+					<div  data-id="<%=recipe.recipeId %>" class='fave-name' onclick=viewRecipe(this)><%= recipe.name %></div>
+					<button data-id="<%= recipe.recipeId %>" onclick="removeFromFaves(this)" type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				</div>
 			<% }) %>
 		</div>
-		</a>
 	<%}); %>
 </script>
+
 <script type="text/template" id="display-recipe">
 	<div id="recipe-holder">
-		<div class="name-of-recipe"><%= partsOfRecipe.name %></div>
+		<h2 class="name-of-recipe"><%= recipe.name %></h2>
+
 		<div class="recipe-source">
-			<div class="recipe-source-site"><%=partsOfRecipe.source.sourceDisplayName%></div>
-			<a class="recipe-source-url" href="<%=partsOfRecipe.source.sourceRecipeUrl%>"><%=partsOfRecipe.source.sourceRecipeUrl%></a>
+			<a class="recipe-source-url" href="<%=recipe.source.sourceRecipeUrl%>">
+				<%=recipe.source.sourceDisplayName%>
+			</a>
 		</div>
+
 		<div class="recipe-picture">
-			<img src="<%=partsOfRecipe.images[0].hostedLargeUrl%>">
+			<img src="<%=recipe.images[0].hostedLargeUrl%>">
 		</div>
-		<div class="recipe-time panel-body"><%=partsOfRecipe.time%></div>
-		<div class="titles">
-			<span class="ingredients">Ingredients</span>
-			<span class="notes">Notes</span>
 
-		</div>
-		<form id="notes-form" class="form-inline" method="POST" action="/notes">
-		  	<div class="form-group">
-		    	<input type="text" class="form-control" placeholder="anything to add?" name="notes[notes]">
-		  	</div>
-		  	<button>Notes!</button>
-		</form>
-<%console.log(partsOfRecipe.recipeNotes); %>
-		//<button data-id="<%=partsOfRecipe.recipeId %>" class="btn btn-info" onclick=addNotes(this)>Add some notes!</button>
+		<div class="recipe-time panel-body"><%=recipe.time%></div>
+		<span class="ingredients">Ingredients</span>
 
-		<% partsOfRecipe.ingredients.forEach(function (items) {%>
-			<li class="recipe-ingredients"><%= items %> </li>
-		<%}); %>
-		
+		<ul>
+			<% recipe.ingredients.forEach(function (item) {%>
+				<li class="recipe-ingredients"><%= item %> </li>
+			<%}); %>
+		</ul>
+
 		
 	</div>
 </script>

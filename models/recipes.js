@@ -15,11 +15,12 @@ var recipeSchema = new mongoose.Schema ({
 						default: ""
 					},
 					source: { //source
-						//figure out how to add urls to models
+						type: Object,
+						default: {}
 					},
 					numberOfServings: { //yield
-						type: Number,
-						default: 0
+						type: String,
+						default: ""
 					},
 					name: { //name
 						type: String,
@@ -34,7 +35,8 @@ var recipeSchema = new mongoose.Schema ({
 						default: ""
 					},
 					images: {
-						//still need to figure out how to do urls
+						type: Array,
+						default: []
 					},
 					recipeNotes: [notes]
 

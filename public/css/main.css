@@ -1,12 +1,16 @@
-.recipe-result {
+#login-signup {
+	display: inline-block;
+}
+
+.recipe-result, .fave-result {
 	border: 3px solid rgb(255, 147, 139);
 	/*max-width: 150px;*/
 	/*max-height: 150px;*/
-	width: 175px;
-	height: 200px;
+	width: 200px; 
+	height: 250px;
 	display: inline-block;
 	padding: 10px;
-	margin: 10px 50px 10px 0px;
+	margin: 10px 25px 10px 25px;
 	border-radius: 20px;
 	
 	/*make background color lighter*/
@@ -14,20 +18,13 @@
 }
 
 .fave-result {
-	width: 175px;
-	height: 200px;
-	display: inline-block;
-	padding: 10px;
-	margin: 10px 50px 10px 0px;
-	border-radius: 20px;
+	border: 3px solid rgb(149, 175, 251);
 }
 
 .recipe-row {
 	position: relative;
-	left: 150px;
-	margin: 10px 0px 10px 0px;
-	margin-left: auto;
-	margin-right: auto;
+	margin: 10px;
+	text-align: center;
 }
 
 .faves-row {
@@ -36,22 +33,21 @@
 	margin: 10px 0px 10px 0px;
 }
 
-#search-bar {
-	position: relative;
-	left: 550px;
-	margin-left: auto;
-	margin-right: auto;
+.search-form {
+	margin: 0px auto;
+	text-align: center;
+}
+
+.recipe-thumbnail-image {
+	margin: 5px;
+}
+
+.submit-search {
+	margin: 10px;
 }
 
 body {
 	background: rgb(138, 236, 250);
-}
-
-.submit-search {
-	position: relative;
-	left: 650px;
-	margin-left: auto;
-	margin-right: auto;
 }
 
 #show-faves {
@@ -66,17 +62,14 @@ body {
 
 .view-button {
 	/*width: 40px;*/
-
 }
 
 #recipe-holder {
 	border: 5px solid rgb(255, 147, 139);
-	height: 700px;
 	max-width: 1250px;
 	border-radius: 20px;
 	background: rgba(255, 240, 159, .8);
-	position: relative;
-	left: 80px;
+	margin: 0px auto;
 }
 
 .name-of-recipe {
@@ -90,9 +83,7 @@ body {
 .recipe-picture{
 	max-width: 374px;
 	border: 7px solid white;
-	margin: 20px;
-	position: relative;
-	left: 400px;
+	margin: 20px auto;
 
 }
 

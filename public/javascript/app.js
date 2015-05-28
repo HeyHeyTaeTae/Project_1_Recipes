@@ -3,17 +3,14 @@ var APP_KEY = "0d58d3705c115190fb2f3e9d89ed3547";
 var APP_ID = "2d5c41e5";
 var searchResults;
 var startNumber = 0;
+
 $(document).ready(function () {
+	$(".see-more-results").toggle()
 	$(".submit-search").on("click", function (event) {
-		var searchQuery = $('.search').val();
-		runSearch(searchQuery, function(data) {
-			var searchResults = data.matches;
-			var groupedSearchResults = sortResults(searchResults)
-			var resultsTemplate = $("#display-search-results").html();
-			var compile = _.template(resultsTemplate);
-			var putOnPage = compile({collection: groupedSearchResults});
-			$("#results-wrapper").html(putOnPage);
-		}, startNumber);
+		startNumber = 0;
+		searchForRecipes(startNumber);
+		$(".see-more-results").toggle()
+		
 	});
 
 	// var $loginForm = $("#login-form");
@@ -23,27 +20,58 @@ $(document).ready(function () {
 	// })
 
 	// TODO: This is not the right way to do this
+	// $(".login-button").on("click", function() {
+	// 	$.get("/login");
+	// })
+
+	// $(".signup-button").on("click")
+
 	$('#show-faves').on('click', function() {
 		viewFavorites();
 	})
 
+	$(".see-more-results").on("click", function () {
+		startNumber += 30;
+		console.log("hello from more results button");
+		searchForRecipes(startNumber);
+	})
+
+	$(".logout").on("click", function () {
+		$.get("/logout");
+	})
+
 })
 
-function sortResults(data) {
+function searchForRecipes (startNumber) {
+	var searchQuery = $('.search').val();
+	runSearch(searchQuery, function(data) {
+		var searchResults = data.matches;
+		var groupedSearchResults = groupResults(searchResults)
+		var resultsTemplate = $("#display-search-results").html();
+		var compile = _.template(resultsTemplate);
+		var putOnPage = compile({collection: groupedSearchResults});
+		$("#results-wrapper").html(putOnPage);
+	}, startNumber);
+}
+
+// Takes an array of data and returns an array of groups of data, each of the specified size
+function groupResults(data, groupSize) {
+	groupSize = groupSize || 5;
 	var groupedResults = [];
-	for (var i = 0; i < Math.ceil(data.length / 5); i++) {
+	for (var i = 0; i < Math.ceil(data.length / groupSize); i++) {
 		var group = [];
-		for(var k = i * 5; k < (i * 5) + 5; k++){
+		for(var k = i * groupSize; k < (i * groupSize) + groupSize; k++){
 			if (data[k] !== undefined) {
 				group.push(data[k]);
 			}
 		}
 		groupedResults.push(group);
 	}
-	return groupedResults
+	return groupedResults;
 }
 
-function runSearch(searchQuery,callback, startNumber) {
+function runSearch(searchQuery, callback, startNumber) {
+	console.log("start number: ", startNumber)
 	if(startNumber === undefined) {
 		startNumber = 0;
 	}
@@ -56,94 +84,89 @@ function runSearch(searchQuery,callback, startNumber) {
 	}, callback);		
 }
 	
-	
-function addToFavorites(recipeButton){
-	var id = $(recipeButton).data().id;
-	$.get('/recipes/' + id).done(function(res) {
-		var foodId = $(recipeButton).data().id;
-		console.log(foodId);
-		$.post("/users/favorites", {
-			foodId: foodId
-		});
-		// If my db doesn't have this recipe, 
-		// fetch it from Yummly, and then use Yummly's
-		// response to create it in my db
-		if (_.isEqual({}, res)) {
-			//var recipe = findItemById(id);
-			//cloneItemById(recipe);
-			findAndCloneItemById(id);
-		} 
+// The Fave button contains the id of the recipe we want to add to the user's favorites
+function addToFavorites(faveButton){
+	console.log(faveButton);
+	var recipeId = $(faveButton).data().id;
+	$.get("/users/check"). done(function (res) {
+		if (res) {
+			$.get('/recipes/' + recipeId).done(function(res) {
+				console.log("in add to favorites: ", recipeId);
+				$.post("/users/favorites", {
+					recipeId: recipeId
+				});
+				// If my db doesn't have this recipe, 
+				// fetch it from Yummly, and then use Yummly's
+				// response to create it in my db
+				if (_.isEqual({}, res)) {
+					findAndCloneRecipeById(recipeId);
+				} 
+			})
+		} else {
+			alert("You need to be logged in to do that!");
+		}
 	})
 }
 
-function findItemById(recipeId, cb) {
+// Fetches the recipe with the given ID from Yummly's API, and then converts it 
+// into a form for this app. 
+// Note that if we this is given a recipe ID that is not in my database, it does not
+// add it to the database. 
+function fetchYummlyRecipeById(recipeId, cb) {
 	$.get(yummlyApiEndpoint + "recipe/" + recipeId + "?", {
 		_app_id: APP_ID,
 		_app_key: APP_KEY
 	}).done(function(res) {
-		createItemById(res,cb);
-
-	})
+		createRecipeData(res,cb);
+	});
 }
 
-function createItemById(recipe,cb) {
-	var recipeInfo = {
-		name: recipe.name, 
-		recipeId: recipe.id, 
-		ingredients: recipe.ingredientLines,
-		time: recipe.totalTime,
-		numberOfServings: recipe.yield,
-		cuisine: recipe.attributes.cuisine,
-		holiday: recipe.attributes.holiday,
-		source: recipe.source,
-		images: recipe.images}
-		console.log("create item by id: ", recipeInfo);
-		cb(recipeInfo);
-	// $.post('/recipes/:id/views', recipeInfo).done(function(res) {
-	// // add the recipeId to the current user's favorites
-	// });
+
+function createRecipeData(yummlyRecipeData, cb) {
+	var recipeInfo = stripYummlyResponseData(yummlyRecipeData);
+	console.log("create item by id: ", recipeInfo);
+	cb(recipeInfo);
 }
-function findAndCloneItemById(recipeId) {
+
+// Yummly's response has far more data than we need. This only keeps the data we need.
+function stripYummlyResponseData(yummlyRecipeData) {
+	return {
+		name: yummlyRecipeData.name, 
+		recipeId: yummlyRecipeData.id, 
+		ingredients: yummlyRecipeData.ingredientLines,
+		time: yummlyRecipeData.totalTime,
+		numberOfServings: yummlyRecipeData.yield,
+		cuisine: yummlyRecipeData.attributes.cuisine,
+		holiday: yummlyRecipeData.attributes.holiday,
+		source: yummlyRecipeData.source,
+		images: yummlyRecipeData.images
+	};
+}
+
+// Fetches a recipe from Yummly's API, clones it, and adds it to the database
+function findAndCloneRecipeById(recipeId) {
+	// TODO: Do not repeat code for fetching recipe from Yummly API. Use a helper
 	$.get(yummlyApiEndpoint + "recipe/" + recipeId + "?", {
 		_app_id: APP_ID,
 		_app_key: APP_KEY
 	}).done(function(res) {
-		var recipeInfo = {
-			name: res.name, 
-			recipeId: res.id, 
-			ingredients: res.ingredientLines,
-			time: res.totalTime,
-			numberOfServings: res.yield,
-			cuisine: res.attributes.cuisine,
-			holiday: res.attributes.holiday,
-			//source: res.source,
-			images: res.images}
-			console.log(recipeInfo);
+		var recipeInfo = stripYummlyResponseData(res);
 		$.post('/recipes/', recipeInfo);
-	}).done(function(res) {
-		// add the recipeId to the current user's favorites
 	});
 }
 
 function viewFavorites() {
-	$.get("/users/favorites", function (res) {
-		console.log(res);
-		renderFavorites(res);
+	$.get("/users/favorites").done(function (res) {
+		if (_.isEqual({}, res)) {
+			alert("You need to be logged in to do that!");
+		} else {
+			renderFavorites(res);
+		}
 	})
 }
-// function viewFavorites() {
-// 	// TODO: Function here should not be responsible for redirecting and 
-// 	// loading data. Backend is responsible for redirects, and then on 
-// 	// the new page load, make the request for the data. 
-// 	$.get("/favorites", function (res) {
-// 		console.log(res);
-// 	}).done(
-// 		$.get("/users/favorites", function (res) {
-// 			renderFavorites(res);	
-// 		})
 
 function renderFavorites(faves) {
-	var arrayOfFaves = sortResults(faves);
+	var arrayOfFaves = groupResults(faves);
 	var faveTemplate = $("#display-faves").html();
 	var compile = _.template(faveTemplate);
 	var favesOnPage = compile({collection: arrayOfFaves});
@@ -151,31 +174,40 @@ function renderFavorites(faves) {
 }
 
 
+// First check if the recipe is in the database. If so, render it. Otherwise, fetch from 
+// Yummly, and then render the response
 function viewRecipe (recipeViewButton) {
-	var id = $(recipeViewButton).data().id;
-	$.get("/recipes/" + id).done(function (res) {
+	var recipeId = $(recipeViewButton).data().id;
+	$.get("/recipes/" + recipeId).done(function (res) {
 		if (_.isEqual({}, res)) {
-			//var recipeId = $(recipeViewButton).data().id;
-			findItemById(id, function (recipe) {
-				console.log("if recipe is not in db: ", recipe);
-				recipeTemplate(recipe);
+			fetchYummlyRecipeById(recipeId, function (recipe) {
+				renderRecipe(recipe);
 			});
 		} else {
-			var recipeId = $(recipeViewButton).data().id;
-			$.get("/views/" + recipeId).done(function (res) {
-				console.log("if recipe is in db: ", res);
-				recipeTemplate(res);
-			})
+			renderRecipe(res);
 		}
 	})
 }
 
-function recipeTemplate (recipe) {
-	var recipeTemp = $("#display-recipe").html();
-	var compile = _.template(recipeTemp);
+function renderRecipe (recipe) {
+	var recipeTemplate = $("#display-recipe").html();
+	var compile = _.template(recipeTemplate);
 	console.log("recipe: ", recipe);
-	var recipeLayout = compile({partsOfRecipe: recipe});
+	var recipeLayout = compile({recipe: recipe});
 	$("#results-wrapper").html(recipeLayout);
+}
+
+function removeFromFaves (deleteButtonData) {
+	var recipeId = $(deleteButtonData).data().id;
+	console.log("remove from faves recipeId: ", recipeId);
+			  $.ajax({
+			    url: '/users/favorites/' + recipeId,
+			    type: 'DELETE',
+			    success: function(res) {
+			      // once successfull, re-render all phrases
+			      viewFavorites();
+			    }
+			  })
 }
 
 function addNotes (noteButton) {
@@ -188,7 +220,7 @@ function addNotes (noteButton) {
 	// 	} else {
 	// 		$.get("/notes", ).done(function (res) {
 	// 			console.log("if recipe is in db: ", res);
-	// 			recipeTemplate(res);
+	// 			renderRecipe(res);
 	// 		})
 	// 	}
 	// })

@@ -1,9 +1,27 @@
-<form method="POST" action="/login">
-  	<div>
-    	<input type="text" name="user[email]" placeholder='Email Address'>
-  	</div>
-  	<div>
-    	<input type="password" name="user[password]" placeholder='Password'>
-  	</div>
-  	<button>Sign In</button>
-</form>
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript" src="/jquery/dist/jquery.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.2/lodash.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/javascript/app.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+	<div>Log in to add and view Faves!</div>
+	<a href="/signup">No account? Make one!</a>
+	<form method="POST" action="/login">
+	  	<div>
+	    	<input type="text" name="user[email]" placeholder='Email Address'>
+	  	</div>
+	  	<div>
+	    	<input type="password" name="user[password]" placeholder='Password'>
+	  	</div>
+	  	<button>Sign In</button>
+	</form>
+
+</body>
+</html>
