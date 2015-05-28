@@ -57,14 +57,14 @@ app.get('/', function (req, res) {
 	// console.log(req.session.userId)
 	// console.log(req.user)
 	// console.log(req.currentUser())
-	req.currentUser(function (err, user) {
-		if (user) {
+	// req.currentUser(function (err, user) {
+	// 	if (user) {
 			var homePath = path.join(views, "homePage.html");
 			res.sendFile(homePath);
-		} else {
-			res.redirect("/login");
-		}
-	})
+	// 	} else {
+	// 		res.redirect("/login");
+	// 	}
+	// })
 	
 });
 
