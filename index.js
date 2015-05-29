@@ -127,9 +127,7 @@ app.get("/recipes/:id", function (req, res) {
 	//add id to user model
 	var id = req.params.id;
 	req.isInDatabase(id, function (err, result) {
-		if (result){ //if found
-			//use indexOf or the underscore method contains() 
-			//to make sure the user doesn't add the same recipe twice
+		if (result){ 
 			res.send(result);
 		} else { //add recipe to the database if not found
 			res.send({});
