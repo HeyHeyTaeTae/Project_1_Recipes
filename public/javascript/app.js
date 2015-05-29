@@ -1,6 +1,4 @@
 var yummlyApiEndpoint = "https://api.yummly.com/v1/api/"; //used to have recipes? at end
-// var APP_KEY = "0d58d3705c115190fb2f3e9d89ed3547";
-// var APP_ID = "2d5c41e5";
 var searchResults;
 var startNumber = 0;
 
