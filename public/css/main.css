@@ -33,21 +33,17 @@
 
 .recipe-result, .fave-result {
 	border: 3px solid rgb(255, 147, 139);
-	/*max-width: 150px;*/
-	/*max-height: 150px;*/
 	width: 200px; 
 	height: 250px;
 	display: inline-block;
 	padding: 10px;
 	margin: 10px 25px 10px 25px;
 	border-radius: 20px;
-	
-	/*make background color lighter*/
-	/*background: rgb(255, 194, 139);*/
 }
 
 .fave-result {
 	border: 3px solid rgb(149, 175, 251);
+	text-align: center;
 }
 
 .recipe-row {
@@ -89,13 +85,7 @@ body {
 }
 
 .fave-button {
-	background: rgb(255, 147, 139);
-	background: rgb(255, 186, 181);
 	background: rgb(255, 218, 139);
-}
-
-.view-button {
-	/*width: 40px;*/
 }
 
 #recipe-holder {
@@ -109,16 +99,12 @@ body {
 .name-of-recipe {
 	text-align: center;
 	font-size: 40px;
-	/*position: relative;
-	left: 500px;*/
-
 }
 
 .recipe-picture{
 	max-width: 374px;
 	border: 7px solid white;
 	margin: 20px auto;
-
 }
 
 .recipe-ingredients {

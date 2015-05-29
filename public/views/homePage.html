@@ -75,15 +75,16 @@
 							class="recipe-thumbnail-image" 
 							onclick=viewRecipe(this)>
 						
-						<div data-id="<%=recipe.recipeId %>" class='recipe-name' onclick=viewRecipe(this)>
-							<%= recipe.name %>
-						</div>
 						<button 
 							data-id="<%= recipe.recipeId %>" 
 							onclick="removeFromFaves(this)" 
 							class="delete-fave btn btn-danger" >
 							Remove
 						</button>
+
+						<div data-id="<%=recipe.recipeId %>" class='recipe-name' onclick=viewRecipe(this)>
+							<%= recipe.name %>
+						</div>
 					</div>
 				<% }) %>
 			</div>
