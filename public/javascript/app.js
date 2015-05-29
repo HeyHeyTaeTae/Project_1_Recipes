@@ -1,4 +1,6 @@
 var yummlyApiEndpoint = "https://api.yummly.com/v1/api/"; //used to have recipes? at end
+// var APP_KEY = "0d58d3705c115190fb2f3e9d89ed3547";
+// var APP_ID = "2d5c41e5";
 var searchResults;
 var startNumber = 0;
 
@@ -10,18 +12,6 @@ $(document).ready(function () {
 		$(".see-more-results").toggle()
 		
 	});
-
-	// var $loginForm = $("#login-form");
-	// $loginForm.toggleClass("hidden");
-	// $(".login-button").on("click", function (event){
-	// 	$loginForm.toggle();
-	// })
-
-	// TODO: This is not the right way to do this
-	// $(".login-button").on("click", function() {
-	// 	$.get("/login");
-	// })
-
 	// $(".signup-button").on("click")
 
 	$('#show-faves').on('click', function() {
@@ -113,7 +103,7 @@ function addToFavorites(faveButton){
 function fetchYummlyRecipeById(recipeId, cb) {
 	$.get(yummlyApiEndpoint + "recipe/" + recipeId + "?", {
 		_app_id: APP_ID,
-		_app_key: APP_KEY
+		_app_key: APP_KEY 
 	}).done(function(res) {
 		createRecipeData(res,cb);
 	});
@@ -146,7 +136,7 @@ function findAndCloneRecipeById(recipeId) {
 	// TODO: Do not repeat code for fetching recipe from Yummly API. Use a helper
 	$.get(yummlyApiEndpoint + "recipe/" + recipeId + "?", {
 		_app_id: APP_ID,
-		_app_key: APP_KEY
+		_app_key: APP_KEY 
 	}).done(function(res) {
 		var recipeInfo = stripYummlyResponseData(res);
 		$.post('/recipes/', recipeInfo);

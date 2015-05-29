@@ -53,18 +53,15 @@ var faveHelpers = function (req, res, next) {
 };
 app.use(faveHelpers);
 
-app.get('/', function (req, res) {
-	// console.log(req.session.userId)
-	// console.log(req.user)
-	// console.log(req.currentUser())
-	// req.currentUser(function (err, user) {
-	// 	if (user) {
+app.get('/', function (req, res) {	
+	req.currentUser(function (err, user) {
+		if (user) {
 			var homePath = path.join(views, "homePage.html");
 			res.sendFile(homePath);
-	// 	} else {
-	// 		res.redirect("/login");
-	// 	}
-	// })
+		} else {
+			res.redirect("/login");
+		}
+	});
 	
 });
 
@@ -229,5 +226,5 @@ app.delete("/users/favorites/:id", function (req, res) {
 // })
 
 app.listen(process.env.PORT ||3000, function (req, res) {
-	
+
 });

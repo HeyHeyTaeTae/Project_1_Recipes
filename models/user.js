@@ -35,8 +35,35 @@ var confirm = function (password, passConfirm) {
 	return password === passConfirm;
 };
 
+var checkPasswordLength = function (password) {
+	if (password.length >= 8) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+var checkEmail = function (email) {
+	var validation = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+	return validation.test(email);
+}
+
 userSchema.statics.createSecure = function (params, cb) {
 	var isConfirmed;
+
+	var isLongEnough;
+
+	var isEmail = checkEmail(params.email);
+
+	if (!isEmail) {
+		return cb("that's not a real email!")
+	}
+
+	isLongEnough = checkPasswordLength(params.password);
+
+	if (!isLongEnough) {
+		return cb("password isn't long enough!")
+	} 
 	//password_confirmation comes from the html form in library_app
 	//signup.html or login.html
 	isConfirmed = confirm(params.password, params.password_confirmation);
