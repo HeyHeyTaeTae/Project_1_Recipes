@@ -27,8 +27,6 @@ var userSchema = new mongoose.Schema({
 					type: Array,
 					default: []
 				}
-
-				//need to be specific to my app
 });
 
 var confirm = function (password, passConfirm) {
@@ -79,7 +77,6 @@ userSchema.statics.createSecure = function (params, cb) {
 
 userSchema.statics.authenticate = function (params, cb) {
 	this.findOne({email: params.email}, function (err, user) {
-		console.log(err);
 		user.checkPassword(params.password, cb);
 	});
 };

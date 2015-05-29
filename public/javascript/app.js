@@ -1,32 +1,29 @@
-var yummlyApiEndpoint = "https://api.yummly.com/v1/api/"; //used to have recipes? at end
+var yummlyApiEndpoint = "https://api.yummly.com/v1/api/";
 var searchResults;
 var startNumber = 0;
 
-$(document).ready(function () {
+$(function () {
 	$(".see-more-results").toggle()
 	$(".submit-search").on("click", function (event) {
 		startNumber = 0;
 		searchForRecipes(startNumber);
 		$(".see-more-results").toggle()
-		
 	});
-	// $(".signup-button").on("click")
 
 	$('#show-faves').on('click', function() {
 		viewFavorites();
-	})
-
-	$(".see-more-results").on("click", function () {
-		startNumber += 30;
-		console.log("hello from more results button");
-		searchForRecipes(startNumber);
-	})
+	});
 
 	$(".logout").on("click", function () {
 		$.get("/logout");
-	})
+	});
 
-})
+});
+
+function seeMoreSearchResults () {
+	startNumber += 30;
+	searchForRecipes(startNumber);
+}
 
 function searchForRecipes (startNumber) {
 	var searchQuery = $('.search').val();
@@ -57,7 +54,6 @@ function groupResults(data, groupSize) {
 }
 
 function runSearch(searchQuery, callback, startNumber) {
-	console.log("start number: ", startNumber)
 	if(startNumber === undefined) {
 		startNumber = 0;
 	}
@@ -77,7 +73,6 @@ function addToFavorites(faveButton){
 	$.get("/users/check"). done(function (res) {
 		if (res) {
 			$.get('/recipes/' + recipeId).done(function(res) {
-				console.log("in add to favorites: ", recipeId);
 				$.post("/users/favorites", {
 					recipeId: recipeId
 				});
@@ -112,7 +107,6 @@ function fetchYummlyRecipeById(recipeId, cb) {
 
 function createRecipeData(yummlyRecipeData, cb) {
 	var recipeInfo = stripYummlyResponseData(yummlyRecipeData);
-	console.log("create item by id: ", recipeInfo);
 	cb(recipeInfo);
 }
 
@@ -180,39 +174,18 @@ function viewRecipe (recipeViewButton) {
 function renderRecipe (recipe) {
 	var recipeTemplate = $("#display-recipe").html();
 	var compile = _.template(recipeTemplate);
-	console.log("recipe: ", recipe);
 	var recipeLayout = compile({recipe: recipe});
 	$("#results-wrapper").html(recipeLayout);
 }
 
 function removeFromFaves (deleteButtonData) {
 	var recipeId = $(deleteButtonData).data().id;
-	console.log("remove from faves recipeId: ", recipeId);
-			  $.ajax({
-			    url: '/users/favorites/' + recipeId,
-			    type: 'DELETE',
-			    success: function(res) {
-			      // once successfull, re-render all phrases
-			      viewFavorites();
-			    }
-			  })
+	$.ajax({
+		url: '/users/favorites/' + recipeId,
+		type: 'DELETE',
+	    success: function(res) {
+	    	// once successfull, re-render all favorites
+	     	viewFavorites();
+	    }
+	});
 }
-
-function addNotes (noteButton) {
-	var $id = $(noteButton).data().id;
-	console.log($id);
-	// $.get("/recipes/" + id).done(function (res) {
-	// 	if (_.isEqual({}, res)) {
-	// 		alert("you need you fave the recipe first!");
-	// 		}
-	// 	} else {
-	// 		$.get("/notes", ).done(function (res) {
-	// 			console.log("if recipe is in db: ", res);
-	// 			renderRecipe(res);
-	// 		})
-	// 	}
-	// })
-}
-
-
-

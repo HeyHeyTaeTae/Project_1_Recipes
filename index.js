@@ -72,11 +72,9 @@ app.get("/signup", function (req, res) {
 
 app.post("/users", function (req, res) {
 	var newUser = req.body.user;
-	console.log(newUser);
 	db.User.createSecure(newUser, function (err, user) {
 		if (user) {
 			req.login(user);
-			//res.send(newUser);
 			res.redirect("/");
 		} else {
 			res.redirect("/signup");
@@ -92,10 +90,8 @@ app.get("/login", function (req, res) {
 app.post('/login', function (req, res) {
 	var user = req.body.user
 	db.User.authenticate(user, function (err, user) {
-		console.log("here");
 		if (!err) {
 			req.login(user);
-			// res.send(user);
 			res.redirect("/");
 		} else {
 			res.redirect("/login");
@@ -132,7 +128,6 @@ app.get("/recipes/:id", function (req, res) {
 			//to make sure the user doesn't add the same recipe twice
 			res.send(result);
 		} else { //add recipe to the database if not found
-			//use _id
 			res.send({});
 		}
 	});
@@ -140,30 +135,11 @@ app.get("/recipes/:id", function (req, res) {
 
 //works some of the time
 app.post("/recipes", function (req, res) {
-	console.log("creating")
-	//console.log("req.body ", req.body);
 	var recipeInfo = req.body;
 	db.Recipe.create(recipeInfo, function (err, recipe) {
 		res.send(recipe);
 	});
 });
-
-// app.post("/notes", function (req, res) {
-// 	//the notes I send here
-// 	//res.body, req.body, ect
-// 	var newNote = req.body.notes.notes;
-// 	req.currentUser(function (err, user) {
-// 		db.Notes.create({notes: newNote, userOfNote: user},
-// 		 function (err, note) {
-// 		 	console.log(note);
-// 		 })
-// 	})
-// })
-
-// app.get("/favorites", function (req, res) {
-// 	var favePath = path.join(views, "favorites.html");
-// 	res.sendFile(favePath);
-// })
 
 app.get("/users/check", function (req, res) {
 	req.currentUser(function (err, user) {
@@ -172,8 +148,8 @@ app.get("/users/check", function (req, res) {
 		} else {
 			res.send(false);
 		}
-	})
-})
+	});
+});
 
 app.get("/users/favorites", function (req, res) {
 	req.currentUser(function (err, user) {
@@ -184,7 +160,6 @@ app.get("/users/favorites", function (req, res) {
 			db.Recipe.find( { recipeId: { $in: recipeIds } }, function(err, recipes) {
 				res.send(recipes);
 			});
-		 	
 		}
 		
 	})	
@@ -192,7 +167,6 @@ app.get("/users/favorites", function (req, res) {
 
 app.post("/users/favorites", function (req, res) {
 	var recipeId = req.body.recipeId;
-	//console.log("req.body: ", req.body.foodId)
 	req.currentUser(function (err, user) {
 		if (user === null) {
 			res.send({});
@@ -209,10 +183,8 @@ app.post("/users/favorites", function (req, res) {
 })
 
 app.delete("/users/favorites/:id", function (req, res) {
-	console.log("deleting", req.params.id);
 	req.currentUser(function (err, user) {
 		var index = user.favoritedRecipes.indexOf(req.params.id);
-		console.log("index: ", index);
 		user.favoritedRecipes.splice(index, 1);
 		user.save();
 		res.sendStatus(204);

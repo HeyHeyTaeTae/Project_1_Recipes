@@ -19,13 +19,6 @@
 </head>
 
 <body>
-  	<!-- <a href="/login">
-  		<button class="login-button btn">Log In</button>
-  	</a>
-  	
-    <a href="/signup">
-    	<button class="signup-button btn">Sign Up</button>
-    </a> -->
     <a href="/logout">
     	<button type="button" class="logout btn btn-warning">Log out</button>
     </a>
@@ -36,9 +29,6 @@
 		<input id="search-bar" class='search form-control' placeholder='Search for Recipes'/>
 		<button class="submit-search btn btn-default">Search</button>
 	</div>
-
-	<button class="see-more-results">See more recipes</button> 
-	<!-- <button class="login-button">Login</button> -->
 	
 	<div id="results-wrapper"></div>
 </body>
@@ -54,10 +44,13 @@
 							<%= recipe.recipeName %>
 						</div>
 					</div>
-				<% }) %>
+				<% }); %>
 			</div>
-		
 	<%}); %>
+
+	<button class="see-more-results" onclick=seeMoreSearchResults()>
+		See more recipes
+	</button> 
 </script>
 
 <script type="text/template" id="display-faves">
