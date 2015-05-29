@@ -67,6 +67,9 @@
 	text-align: center;
 }
 
+.no-faves {
+	text-align: center;
+}
 .recipe-thumbnail-image {
 	margin: 5px;
 	cursor: pointer;

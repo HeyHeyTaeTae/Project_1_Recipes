@@ -22,10 +22,7 @@ app.use(session({
 }));
 
 app.get("/apiInfo", function (req, res) {
-	console.log("check id: ", api_id);
-	console.log("check key: ", process.env.APP_KEY)
 	var api_object = {id: api_id, key: api_key};
-	console.log(api_object)
 	res.send(api_object);
 })
 
