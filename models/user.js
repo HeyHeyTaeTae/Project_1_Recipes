@@ -36,17 +36,15 @@ var confirm = function (password, passConfirm) {
 };
 
 var checkPasswordLength = function (password) {
-	if (password.length >= 8) {
-		return true;
-	} else {
-		return false;
-	}
-}
+	return password.length >= 8;
+};
 
+// Checks that string is a valid email address
+// http://stackoverflow.com/questions/46155/validate-email-address-in-javascript
 var checkEmail = function (email) {
 	var validation = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 	return validation.test(email);
-}
+};
 
 userSchema.statics.createSecure = function (params, cb) {
 	var isConfirmed;
