@@ -13,6 +13,7 @@
 <body>
     <div class="page-message">Thank you for signing up!</div>
     <div class="password-notice">Your password should be at least 8 characters long</div>
+    <a class="signup-link" href="/login">Already have an account? Log in!</a>
     <form id="signup-form" class="form-horizontal" method="POST" action="/users">
         <div class="form-group">
             <input type="text" class="form-control" name="user[email]" placeholder='Email Address'>
@@ -23,7 +24,7 @@
         <div class="form-group">
             <input type="password" class="form-control" name="user[password_confirmation]" placeholder='Password Confirmation'>
         </div>
-        <button>Sign Up</button>
+        <input type="submit" value="Sign Up">
     </form>
 
 </body>

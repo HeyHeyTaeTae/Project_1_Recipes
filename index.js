@@ -197,7 +197,11 @@ app.post("/users/favorites", function (req, res) {
 		if (user === null) {
 			res.send({});
 		} else {
-			user.favoritedRecipes.push(recipeId);
+			var favoritedRecipes = user.favoritedRecipes;
+			// Only add the recipe to the user's favorites if it isn't there already
+			if (favoritedRecipes.indexOf(recipeId) === -1) {
+				favoritedRecipes.push(recipeId);	
+			}
 			user.save();
 		}
 	})
@@ -205,7 +209,7 @@ app.post("/users/favorites", function (req, res) {
 })
 
 app.delete("/users/favorites/:id", function (req, res) {
-	console.log("in backend delete");
+	console.log("deleting", req.params.id);
 	req.currentUser(function (err, user) {
 		var index = user.favoritedRecipes.indexOf(req.params.id);
 		console.log("index: ", index);
@@ -213,17 +217,7 @@ app.delete("/users/favorites/:id", function (req, res) {
 		user.save();
 		res.sendStatus(204);
 	})
-})
-
-// app.get("/views/:id", function (req, res) {
-// 	//console.log(req.params.id)
-// 	var idOfRecipe = req.params.id;
-// 	req.isInDatabase(idOfRecipe, function (err, recipe) {
-// 		//console.log(recipe);
-// 		res.send(recipe);
-// 	});
-// 	//res.send()
-// })
+});
 
 app.listen(process.env.PORT ||3000, function (req, res) {
 

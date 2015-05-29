@@ -74,8 +74,8 @@ function runSearch(searchQuery, callback, startNumber) {
 	
 // The Fave button contains the id of the recipe we want to add to the user's favorites
 function addToFavorites(faveButton){
-	console.log(faveButton);
-	var recipeId = $(faveButton).data().id;
+	var $faveButton = $(faveButton);
+	var recipeId = $faveButton.data().id;
 	$.get("/users/check"). done(function (res) {
 		if (res) {
 			$.get('/recipes/' + recipeId).done(function(res) {
@@ -93,7 +93,9 @@ function addToFavorites(faveButton){
 		} else {
 			alert("You need to be logged in to do that!");
 		}
-	})
+	});
+	$faveButton.html("Added!");
+
 }
 
 // Fetches the recipe with the given ID from Yummly's API, and then converts it 
