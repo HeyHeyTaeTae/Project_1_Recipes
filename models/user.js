@@ -77,7 +77,12 @@ userSchema.statics.createSecure = function (params, cb) {
 
 userSchema.statics.authenticate = function (params, cb) {
 	this.findOne({email: params.email}, function (err, user) {
-		user.checkPassword(params.password, cb);
+		if (err) {
+			return err;
+		} else {
+			return user.checkPassword(params.password, cb);
+		}
+		
 	});
 };
 
