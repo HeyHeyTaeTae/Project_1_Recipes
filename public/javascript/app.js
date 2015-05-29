@@ -57,13 +57,21 @@ function runSearch(searchQuery, callback, startNumber) {
 	if(startNumber === undefined) {
 		startNumber = 0;
 	}
-	$.get(yummlyApiEndpoint + "recipes?", {
-		_app_id: APP_ID,
-		_app_key: APP_KEY, 
-		q: searchQuery,
-		maxResult: 30,
-		start: startNumber
-	}, callback);		
+	$.get("/apiInfo").done(function (res) {
+		debugger
+		//if you console.log APP_ID or APP_KEY,
+		//it'll show the key and id, but it's a start
+		var APP_ID = res.id;
+		var APP_KEY = res.key;
+		$.get(yummlyApiEndpoint + "recipes?", {
+				_app_id: APP_ID,
+				_app_key: APP_KEY, 
+				q: searchQuery,
+				maxResult: 30,
+				start: startNumber
+			}, callback);		
+	})
+	
 }
 	
 // The Fave button contains the id of the recipe we want to add to the user's favorites
@@ -96,12 +104,16 @@ function addToFavorites(faveButton){
 // Note that if we this is given a recipe ID that is not in my database, it does not
 // add it to the database. 
 function fetchYummlyRecipeById(recipeId, cb) {
-	$.get(yummlyApiEndpoint + "recipe/" + recipeId + "?", {
-		_app_id: APP_ID,
-		_app_key: APP_KEY 
-	}).done(function(res) {
-		createRecipeData(res,cb);
-	});
+	$.get("/apiInfo").done(function (res) {
+		var APP_ID = res.id;
+		var APP_KEY = res.key;
+		$.get(yummlyApiEndpoint + "recipe/" + recipeId + "?", {
+			_app_id: APP_ID,
+			_app_key: APP_KEY 
+		}).done(function(res) {
+			createRecipeData(res,cb);
+		});
+	})
 }
 
 
@@ -128,13 +140,18 @@ function stripYummlyResponseData(yummlyRecipeData) {
 // Fetches a recipe from Yummly's API, clones it, and adds it to the database
 function findAndCloneRecipeById(recipeId) {
 	// TODO: Do not repeat code for fetching recipe from Yummly API. Use a helper
-	$.get(yummlyApiEndpoint + "recipe/" + recipeId + "?", {
-		_app_id: APP_ID,
-		_app_key: APP_KEY 
-	}).done(function(res) {
-		var recipeInfo = stripYummlyResponseData(res);
-		$.post('/recipes/', recipeInfo);
-	});
+	$.get("/apiInfo").done(function (res) {
+		var APP_ID = res.id;
+		var APP_KEY = res.key;
+		$.get(yummlyApiEndpoint + "recipe/" + recipeId + "?", {
+				_app_id: APP_ID,
+				_app_key: APP_KEY 
+			}).done(function(res) {
+				var recipeInfo = stripYummlyResponseData(res);
+				$.post('/recipes/', recipeInfo);
+			});
+	})
+	
 }
 
 function viewFavorites() {

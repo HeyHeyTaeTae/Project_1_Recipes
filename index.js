@@ -3,6 +3,9 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var db = require('./models/index.js');
 var session = require("express-session");
+var env = process.env;
+var api_key = env.APP_KEY
+var api_id = env.APP_ID
 
 var app = express();
 app.use(bodyParser.urlencoded({extended: true }));
@@ -18,6 +21,13 @@ app.use(session({
 	saveUnintialized: true
 }));
 
+app.get("/apiInfo", function (req, res) {
+	console.log("check id: ", api_id);
+	console.log("check key: ", process.env.APP_KEY)
+	var api_object = {id: api_id, key: api_key};
+	console.log(api_object)
+	res.send(api_object);
+})
 
 var loginHelpers = function (req, res, next) {
 
@@ -43,9 +53,6 @@ var loginHelpers = function (req, res, next) {
 app.use(loginHelpers);
 
 var faveHelpers = function (req, res, next) {
-	// var baseUrl = "https://api.yummly.com/v1";
-	// var API_KEY = "0d58d3705c115190fb2f3e9d89ed3547"
-	// var APP_ID = "2d5c41e5"
 	req.isInDatabase = function (idOfRecipe, cb) {
 		db.Recipe.findOne({recipeId:idOfRecipe}, cb)
 	};

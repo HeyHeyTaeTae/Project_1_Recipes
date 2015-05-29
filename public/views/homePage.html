@@ -14,11 +14,14 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/javascript/app.js"></script>
-	<script type="text/javascript" src="/javascript/api_stuff.js"></script>
+	
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 
 <body>
+	<div class="page-header">
+	  <h1 id="app-name">Cook.bk<small>The site for all your cooking needs!</small></h1>
+	</div>
     <a href="/logout">
     	<button type="button" class="logout btn btn-warning">Log out</button>
     </a>
@@ -48,7 +51,7 @@
 			</div>
 	<%}); %>
 
-	<button class="see-more-results" onclick=seeMoreSearchResults()>
+	<button class="see-more-results btn btn-default" onclick=seeMoreSearchResults()>
 		See more recipes
 	</button> 
 </script>
