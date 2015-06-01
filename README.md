@@ -1,14 +1,14 @@
-Cook.bk
+#Cook.bk
 
 Users can search through the Yummly api and favorite and view recipes. They can make an account and sign in to view their favorites.
 
-Link to app:
+##Link to app:
 https://floating-sierra-1092.herokuapp.com/
 
-Technologies used:
+##Technologies used:
 Express, mongo, node, Bootstrap, underscore, jQuery, and javascript.
 
-Future Goals:
+##Future Goals:
 Remove the "Fave" button from recipes that a user has already favorited.
 
 To allow users to add notes to existing recipes that only they would be able to view.
