@@ -8,6 +8,9 @@ https://floating-sierra-1092.herokuapp.com/
 ##Technologies used:
 Express, mongo, node, Bootstrap, underscore, jQuery, and javascript.
 
+##Directions for installing:
+Clone the directory to your computer and use npm install to install all the dependences. If you wish to contribute to this project, fork the repo it before you clone it.
+
 ##Future Goals:
 Remove the "Fave" button from recipes that a user has already favorited.
 
