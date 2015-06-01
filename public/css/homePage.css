@@ -1,0 +1,38 @@
+@font-face {
+	font-family: 'Rock Salt', cursive;
+	src: url('http://fonts.googleapis.com/css?family=Rock+Salt');
+}
+
+body {
+	background-size: cover;
+}
+
+#appName {
+	font-family: 'Rock Salt';
+	color: white;
+    font-size: 140px;
+    text-align: center;
+}
+
+#soundBite {
+    color: beige;
+    font-size: 25px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+#appBlurb {
+	margin: 60px 0 10px;
+    color: white;
+    text-align: center;
+    font-size: 35px;
+}
+
+/*#homeModal {
+	padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.3333333;
+    border-radius: 6px;
+    text-align: center;
+}*/
+

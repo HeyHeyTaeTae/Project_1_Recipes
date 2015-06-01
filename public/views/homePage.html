@@ -1,121 +1,79 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
-	<script type="text/javascript" src="/jquery/dist/jquery.js"></script>
-	<script 
-		type="text/javascript" 
-		src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js">
-	</script>
-	<script 
-		type="text/javascript" 
-		src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.2/lodash.min.js">
-	</script>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="/javascript/app.js"></script>
-	
-	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/homePage.css">
+	<title>Cook.bk</title>
 </head>
-
-<body>
-	
-	<div class="page-header">
-	<a href="/">
-	 	<h1 id="app-name">Cook.bk </a>
-	 		<small>The site for all your cooking needs!</small></h1>
-	
+<body background="http://cdn.shopify.com/s/files/1/0395/7873/products/NHBBx376.jpg?v=1426189112">
+	<h1 id="appName">Cook.bk</h1>
+	<h2 id="soundBite">Add Your Personal Flavor</h2>
+	<p id="appBlurb">Cook.bk is your personal blank canvas. Simply search for recipes you want to make and leave comments for yourself whenever you make tweaks.</p>
+	<div>
+		<!-- Button trigger modal -->
+		<button type="button" id="homeModal" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="display: block; margin: 50px auto;">
+		  Member Sign In
+		</button>
 	</div>
-    <a href="/logout">
-    	<button type="button" class="logout btn btn-warning">Log out</button>
-    </a>
-		    
-	<button id="show-faves" type="button" class="btn btn-lg">Faves!</button>
-
-	<div class="input-group input-group-lg search-form">
-		<input id="search-bar" class='search form-control' placeholder='Search for Recipes'/>
-		<button class="submit-search btn btn-default">Search</button>
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	    <div class="modal-content">
+	      	<div class="modal-header">
+	        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        	<h4 class="modal-title" id="myModalLabel">Login</h4>
+	        </div>
+	      	<div class="modal-body">
+	        	<form method="POST" action="/login">
+				  <div class="form-group">
+				    <label for="exampleInputEmail1">Email address</label>
+				    <input type="email" class="form-control" name="user[email]" id="exampleInputEmail1" placeholder="Enter email">
+				  </div>
+				  <div class="form-group">
+				    <label for="exampleInputPassword1">Password</label>
+				    <input type="password" class="form-control" name="user[password]" id="exampleInputPassword1" placeholder="Password">
+				  </div>
+				  <button type="submit" class="btn btn-default">Submit</button>
+				</form>
+	        </div>
+	    	</div>
+		</div>
 	</div>
-	
-	<div id="results-wrapper"></div>
+	<div>
+		<!-- Button trigger modal -->
+		<button type="button" id="homeModal" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal2" style="display: block; margin: 15px auto;">
+		  Sign Up
+		</button>
+	</div>
+	<!-- Modal -->
+	<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	    <div class="modal-content">
+	      	<div class="modal-header">
+	        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        	<h4 class="modal-title" id="myModalLabel">Signup</h4>
+	        </div>
+	      	<div class="modal-body">
+	        	<form method="POST" action="/signup">
+				  <div class="form-group">
+				    <label for="exampleInputEmail1">Email address</label>
+				    <input type="email" class="form-control" name="user[email]" id="exampleInputEmail1" placeholder="Enter email">
+				  </div>
+				  <div class="form-group">
+				    <label for="exampleInputPassword1">Password</label>
+				    <input type="password" class="form-control" name="user[password]" id="exampleInputPassword1" placeholder="Password">
+				  </div>
+				  <div>
+				  	<label for="exampleInputPassword1">Confirm Password</label>
+				  	<input type="password" class="form-control" name="user[password_confirmation]" id=" exampleInputPassword1" placeholder="Retype Password">
+				  </div>
+				  <button type="submit" class="btn btn-default">Submit</button>
+				</form>
+	        </div>
+	    	</div>
+		</div>
+	</div>
 </body>
-
-<script type="text/template" id="display-search-results">
-	<% collection.forEach(function (group) { %>
-			<div class="recipe-row">
-				<% group.forEach(function(recipe) { %>
-					<div class='recipe-result  thumbnail' >
-						<img data-id="<%=recipe.id %>" src="<%= recipe.imageUrlsBySize[90] %>" class="recipe-thumbnail-image" onclick=viewRecipe(this)>
-						<button data-id="<%=recipe.id %>" class="fave-button btn btn-default" onclick=addToFavorites(this)>Fave</button>
-						<div data-id="<%=recipe.id %>" class='recipe-name' onclick=viewRecipe(this)>
-							<%= recipe.recipeName %>
-						</div>
-					</div>
-				<% }); %>
-			</div>
-	<%}); %>
-
-	<button class="see-more-results btn btn-default" onclick=seeMoreSearchResults()>
-		See more recipes
-	</button> 
-</script>
-
-<script type="text/template" id="display-faves">
-	<% if (collection.length === 0) { %>
-		<h3 class="no-faves">You have no Faves!</h3>
-	<% } else { %>
-		<% collection.forEach(function (group) { %>
-			<div class="faves-row">
-				<% group.forEach(function(recipe) { %>
-					<%console.log(recipe)%>
-					<div class='fave-result  thumbnail' >
-						<img  
-							data-id="<%=recipe.recipeId %>" 
-							src="<%= recipe.images[0].hostedMediumUrl %>" 
-							class="recipe-thumbnail-image" 
-							onclick=viewRecipe(this)>
-						
-						<button 
-							data-id="<%= recipe.recipeId %>" 
-							onclick="removeFromFaves(this)" 
-							class="delete-fave btn btn-danger" >
-							Remove
-						</button>
-
-						<div data-id="<%=recipe.recipeId %>" class='recipe-name' onclick=viewRecipe(this)>
-							<%= recipe.name %>
-						</div>
-					</div>
-				<% }) %>
-			</div>
-		<%}); %>
-	<% } %>
-
-	
-</script>
-
-<script type="text/template" id="display-recipe">
-	<div id="recipe-holder">
-		<h2 class="name-of-recipe"><%= recipe.name %></h2>
-
-		<div class="recipe-source">
-			<a class="recipe-source-url" href="<%=recipe.source.sourceRecipeUrl%>">
-				<%=recipe.source.sourceDisplayName%>
-			</a>
-		</div>
-
-		<div class="recipe-picture">
-			<img src="<%=recipe.images[0].hostedLargeUrl%>">
-		</div>
-
-		<div class="recipe-time panel-body"><%=recipe.time%></div>
-		<span class="ingredients">Ingredients</span>
-
-		<ul>
-			<% recipe.ingredients.forEach(function (item) {%>
-				<li class="recipe-ingredients"><%= item %> </li>
-			<%}); %>
-		</ul>
-	</div>
-</script>
 </html>

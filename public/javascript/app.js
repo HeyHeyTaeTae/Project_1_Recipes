@@ -1,4 +1,7 @@
 var yummlyApiEndpoint = "https://api.yummly.com/v1/api/";
+var APP_KEY = "0d58d3705c115190fb2f3e9d89ed3547";
+var APP_ID = "2d5c41e5";
+
 var searchResults;
 var startNumber = 0;
 
@@ -58,11 +61,11 @@ function runSearch(searchQuery, callback, startNumber) {
 		startNumber = 0;
 	}
 	$.get("/apiInfo").done(function (res) {
-		debugger
+		// debugger
 		//if you console.log APP_ID or APP_KEY,
 		//it'll show the key and id, but it's a start
-		var APP_ID = res.id;
-		var APP_KEY = res.key;
+		// var APP_ID = res.id;
+		// var APP_KEY = res.key;
 		$.get(yummlyApiEndpoint + "recipes?", {
 				_app_id: APP_ID,
 				_app_key: APP_KEY, 
@@ -105,8 +108,8 @@ function addToFavorites(faveButton){
 // add it to the database. 
 function fetchYummlyRecipeById(recipeId, cb) {
 	$.get("/apiInfo").done(function (res) {
-		var APP_ID = res.id;
-		var APP_KEY = res.key;
+		// var APP_ID = res.id;
+		// var APP_KEY = res.key;
 		$.get(yummlyApiEndpoint + "recipe/" + recipeId + "?", {
 			_app_id: APP_ID,
 			_app_key: APP_KEY 
@@ -141,8 +144,8 @@ function stripYummlyResponseData(yummlyRecipeData) {
 function findAndCloneRecipeById(recipeId) {
 	// TODO: Do not repeat code for fetching recipe from Yummly API. Use a helper
 	$.get("/apiInfo").done(function (res) {
-		var APP_ID = res.id;
-		var APP_KEY = res.key;
+		// var APP_ID = res.id;
+		// var APP_KEY = res.key;
 		$.get(yummlyApiEndpoint + "recipe/" + recipeId + "?", {
 				_app_id: APP_ID,
 				_app_key: APP_KEY 

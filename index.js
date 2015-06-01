@@ -18,7 +18,7 @@ var views = path.join(__dirname, "public/views");
 app.use(session({
 	secret: "SUPER STUFF",
 	resave: false,
-	saveUnintialized: true
+	saveUninitialized: true
 }));
 
 app.get("/apiInfo", function (req, res) {
@@ -57,48 +57,49 @@ var faveHelpers = function (req, res, next) {
 };
 app.use(faveHelpers);
 
-app.get('/', function (req, res) {	
+app.get("/", function (req, res) {	
 	req.currentUser(function (err, user) {
 		if (user) {
+			var profilePath = path.join(views, "profile.html");
+			res.sendFile(profilePath);
+		} else {
 			var homePath = path.join(views, "homePage.html");
 			res.sendFile(homePath);
-		} else {
-			res.redirect("/login");
 		}
 	});
 	
 });
 
-app.get("/signup", function (req, res) {
-	var signupPath = path.join(views, "sign_up_page.html");
-	res.sendFile(signupPath);
-});
+// app.get("/signup", function (req, res) {
+// 	var signupPath = path.join(views, "sign_up_page.html");
+// 	res.sendFile(signupPath);
+// });
 
-app.post("/users", function (req, res) {
+app.post("/signup", function (req, res) {
 	var newUser = req.body.user;
 	db.User.createSecure(newUser, function (err, user) {
 		if (user) {
 			req.login(user);
-			res.redirect("/");
+			res.redirect("/profile");
 		} else {
-			res.redirect("/signup");
+			res.redirect("/");
 		}
 	});
 });
 
-app.get("/login", function (req, res) {
-	var loginPath = path.join(views, "login.html");
-	res.sendFile(loginPath);
-});
+// app.get("/login", function (req, res) {
+// 	var loginPath = path.join(views, "login.html");
+// 	res.sendFile(loginPath);
+// });
 
 app.post('/login', function (req, res) {
 	var user = req.body.user
 	db.User.authenticate(user, function (err, user) {
 		if (!err) {
 			req.login(user);
-			res.redirect("/");
+			res.redirect("/profile");
 		} else {
-			res.redirect("/login");
+			res.redirect("/");
 		}
 	})
 });
@@ -108,16 +109,17 @@ app.get("/profile", function (req, res) {
 	res.sendFile(profilePath);
 	req.currentUser(function (err, user) {
 		if (!err) {
-			res.send(user.email);
+			console.log("It's all good");
+			// res.send(user.email);
 		} else {
-			res.redirect("/login");
+			res.redirect("/");
 		}
 	});
 });
 
 app.get("/logout", function (req, res) {
 	req.logout();
-	res.redirect("/login");
+	res.redirect("/");
 	
 });
 
